@@ -2,7 +2,7 @@
 
 namespace AutoRentNet.Models;
 
-public class Reservation
+public record Reservation
 {
     public int Id { get; set; }
 

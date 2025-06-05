@@ -2,7 +2,7 @@
 
 namespace AutoRentNet.Models;
 
-public class Vehicle
+public record Vehicle
 {
     public int Id { get; init; }
     

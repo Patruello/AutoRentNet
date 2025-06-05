@@ -1,4 +1,5 @@
 using AutoRentNet.Data;
+using AutoRentNet.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,4 +28,31 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();   // Tworzy DB. + seed
 }
 
+var api = app.MapGroup("/api");
+
+api.MapGet("/vehicles", async (AppDbContext db) =>
+    await db.Vehicles.OrderBy(v => v.Name).ToListAsync());
+
+api.MapGet("/reservations", async (AppDbContext db) =>
+    await db.Reservations
+        .Include(r => r.Vehicle)
+        .Select(r => new ReservationReadDto(
+            r.Id,
+            r.VehicleId,
+            r.Vehicle.Name,
+            r.StartDate,
+            r.EndDate,
+            r.CustomerName))
+        .ToListAsync());
+
+api.MapPost("/reservations", async (ReservationDto dto, AppDbContext db) =>
+{
+    var (ok, error, entity) = await ReservationLogic.CreateAsync(dto, db);
+
+    return ok
+        ? Results.Created($"/api/reservations/{entity!.Id}", entity)
+        : Results.BadRequest(new { error });
+});
+
 app.Run();
+
