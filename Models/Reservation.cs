@@ -6,25 +6,24 @@ public record Reservation
 {
     public int Id { get; set; }
 
-    // Klucz obcy → Vehicle
+    // Foreign Key → Vehicle
     [Required]
     public int VehicleId { get; set; }
 
     public Vehicle Vehicle { get; set; } = default!;
 
-    // Dane klienta
+    // Client Data
     [Required, MaxLength(60)]
     public string CustomerName { get; set; } = default!;
 
     [EmailAddress]
     public string CustomerEmail { get; set; } = default!;
 
-    // Daty rezerwacji
-    [DataType(DataType.Date)]
-    public DateTime StartDate { get; set; }
-
-    [DataType(DataType.Date)]
-    public DateTime EndDate { get; set; }
+    // Dates and Locations
+    [MaxLength(60)] public string PickupLocation  { get; set; } = default!;
+    [MaxLength(60)] public string DropoffLocation { get; set; } = default!;
+    public DateTime PickupDateTime  { get; set; }
+    public DateTime DropoffDateTime { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

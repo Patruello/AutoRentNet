@@ -5,29 +5,35 @@ using Microsoft.EntityFrameworkCore;
 
 public static class ReservationLogic
 {
-    public static async Task<(bool ok, string? error, Reservation? entity)> CreateAsync(
-        ReservationDto dto, AppDbContext db)
+    public static async Task<(bool ok, string? error, Reservation? entity)>
+        CreateAsync(ReservationDto dto, AppDbContext db)
     {
-        if (dto.StartDate >= dto.EndDate)
-            return (false, "StartDate must be earlier than EndDate", null);
+        // 1. Walidacja zakresu czasu
+        if (dto.PickupDateTime >= dto.DropoffDateTime)
+            return (false, "Pickup must be earlier than drop-off", null);
 
-        var overlaps = await db.Reservations.AnyAsync(r =>
+        // 2. Kolizja z inną rezerwacją tego samego auta
+        bool overlap = await db.Reservations.AnyAsync(r =>
             r.VehicleId == dto.VehicleId &&
-            r.StartDate < dto.EndDate &&
-            dto.StartDate < r.EndDate);
+            r.PickupDateTime < dto.DropoffDateTime &&
+            dto.PickupDateTime < r.DropoffDateTime);
 
-        if (overlaps)
+        if (overlap)
             return (false, "Reservation overlaps with existing booking", null);
 
+        // 3. Mapowanie
         var entity = new Reservation
         {
-            VehicleId     = dto.VehicleId,
-            StartDate     = dto.StartDate,
-            EndDate       = dto.EndDate,
-            CustomerName  = dto.CustomerName,
-            CustomerEmail = dto.CustomerEmail,
-            CreatedAt     = DateTime.UtcNow
+            VehicleId        = dto.VehicleId,
+            PickupLocation   = dto.PickupLocation,
+            DropoffLocation  = dto.DropoffLocation,
+            PickupDateTime   = dto.PickupDateTime,
+            DropoffDateTime  = dto.DropoffDateTime,
+            CustomerName     = dto.CustomerName,
+            CustomerEmail    = dto.CustomerEmail,
+            CreatedAt        = DateTime.UtcNow
         };
+
         db.Reservations.Add(entity);
         await db.SaveChangesAsync();
         return (true, null, entity);

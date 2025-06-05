@@ -75,11 +75,13 @@ public class AppDbContext : DbContext
     [
         new Reservation { Id = 1, VehicleId = 1,
             CustomerName = "Jan Kowalski", CustomerEmail = "jan@example.com",
-            StartDate = new DateTime(2025, 7, 1), EndDate = new DateTime(2025, 7, 4),
+            PickupLocation = "Lotnisko Lublin", DropoffLocation = "Lotnisko Lublin",
+            PickupDateTime = new DateTime(2025, 7, 1), DropoffDateTime = new DateTime(2025, 7, 4),
             CreatedAt = new DateTime(2025, 6, 1, 17, 30, 0, DateTimeKind.Utc) },
         new Reservation { Id = 2, VehicleId = 2,
             CustomerName = "Anna Nowak", CustomerEmail = "anna@example.com",
-            StartDate = new DateTime(2025, 8, 16), EndDate = new DateTime(2025, 8, 20),
+            PickupLocation = "Lotnisko Lublin", DropoffLocation = "Lotnisko Lublin",
+            PickupDateTime = new DateTime(2025, 8, 16, 9, 0, 0, DateTimeKind.Utc), DropoffDateTime = new DateTime(2025, 8, 20, 18, 0, 0, DateTimeKind.Utc),
             CreatedAt = new DateTime(2025, 6, 3, 12, 0, 0, DateTimeKind.Utc) }
     ];
 }

@@ -1,8 +1,11 @@
 ﻿namespace AutoRentNet.Dtos;
 
-public record ReservationReadDto(int Id,
+public record ReservationReadDto(
+    int Id,
     int VehicleId,
     string VehicleName,
-    DateTime StartDate,
-    DateTime EndDate,
+    string PickupLocation,
+    string DropoffLocation,
+    DateTime PickupDateTime,
+    DateTime DropoffDateTime,
     string CustomerName);

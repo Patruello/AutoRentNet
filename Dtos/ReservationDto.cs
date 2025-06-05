@@ -2,7 +2,9 @@
 
 public record ReservationDto(
     int VehicleId,
-    DateTime StartDate,
-    DateTime EndDate,
+    string PickupLocation,
+    string DropoffLocation,
+    DateTime PickupDateTime,
+    DateTime DropoffDateTime,
     string CustomerName,
     string CustomerEmail);
