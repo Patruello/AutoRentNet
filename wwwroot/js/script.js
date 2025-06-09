@@ -47,6 +47,31 @@ function isVehicleAvailable(vehicleId, startRaw, endRaw, reservations) {
 //--------------------------------------------------------------
 //  INDEX.html  – wyszukiwanie
 //--------------------------------------------------------------
+
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date();
+    
+    const pickupDateInput  = document.getElementById('pickupDate');
+    const dropoffDateInput = document.getElementById('dropoffDate');
+    const pickupTimeInput  = document.getElementById('pickupTime');
+    const dropoffTimeInput = document.getElementById('dropoffTime');
+
+    if (!pickupDateInput || !dropoffDateInput || !pickupTimeInput || !dropoffTimeInput) {
+        return;
+    }
+    
+    const pickupDate = new Date(today);
+    pickupDate.setDate(today.getDate() + 2);
+    pickupDateInput.value = pickupDate.toISOString().split('T')[0];
+    
+    const dropoffDate = new Date(pickupDate);
+    dropoffDate.setDate(pickupDate.getDate() + 2);
+    dropoffDateInput.value = dropoffDate.toISOString().split('T')[0];
+    
+    pickupTimeInput.value  = "10:00";
+    dropoffTimeInput.value = "10:00";
+});
+
 async function searchCars() {
     const pickupLoc  = document.getElementById('pickupLocation')?.value;
     const dropoffLoc = document.getElementById('dropoffLocation')?.value;
@@ -107,7 +132,7 @@ async function loadSearchResults() {
     data.forEach(v => {
         container.insertAdjacentHTML(
             'beforeend',
-            `<div class="col-md-4 mb-3">
+            `<div class="col-lg-4 col-sm-6 col-xs-12">
          <div class="card">
            <img src="${v.image}" class="card-img-top" alt="${v.name}">
            <div class="card-body">
